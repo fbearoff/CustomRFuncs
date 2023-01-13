@@ -7,7 +7,7 @@
 #' @returns A data.table object
 #' @export
 compDESeq2 <- function(condition1, condition2) {
-  res <- results(
+  res <- DESeq2::results(
     dds,
     contrast = c("condition", condition1, condition2),
     alpha = 0.05
@@ -24,14 +24,15 @@ compDESeq2 <- function(condition1, condition2) {
   z$description <-
   gene_synonym$description[match(rownames(res), gene_synonym$gene_id)]
   z <- merge(z, txi$abundance, by = 0)
-  setnames(z, "Row.names", "gene_id")
+  data.table::setnames(z, "Row.names", "gene_id")
   z <-
   z[, !(names(z) %in% row.names(subset(
     samples,
     condition != condition1 &
     condition != condition2
   )))]
-  z <- as.data.table(z)
-  z <- z[chr %in% c(1:22, "MT", "X", "Y")][gene_symbol != ""]
+  z <- data.table::as.data.table(z)
+  z <- z[z[["chr"]] %in% c(1:22, "MT", "X", "Y"), ]
+  z <- z[z[["gene_symbol"]] != "", ]
   return(z)
 }

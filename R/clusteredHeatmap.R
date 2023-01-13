@@ -4,24 +4,34 @@
 #'
 #' @param condition1 Reference condition
 #' @param condition2 Experimental condition
+#' @param top_count How many genes to plot
 #' @returns A ComplexHeatmap object
+#' @importFrom dplyr "%>%"
 #' @export
-clusteredHeatmap <- function(condition1, condition2, top_count=50) {
+clusteredHeatmap <- function(condition1, condition2, top_count = 50) {
   comparison <- paste0(condition1, " vs ", condition2)
-  z <- compDESeq2(condition1, condition2)
+  z <- CustomRFuncs::compDESeq2(condition1, condition2)
 
-  up_genes <- z[order(padj)][log2FoldChange > 1]$gene_id[1:top_count]
-  down_genes <- z[order(padj)][log2FoldChange < -1]$gene_id[1:top_count]
+  up_genes <- z %>%
+    dplyr::arrange(padj) %>%
+    dplyr::filter(log2FoldChange > 1) %>%
+    dplyr::select(gene_id) %>%
+    dplyr::slice_head(n = top_count / 2)
 
-  top_genes <- c(up_genes, down_genes)
+  down_genes <- z %>%
+    dplyr::arrange(padj) %>%
+    dplyr::filter(log2FoldChange < -1) %>%
+    dplyr::select(gene_id) %>%
+    dplyr::slice_head(n = top_count / 2)
 
+  top_genes <- dplyr::bind_rows(up_genes, down_genes)
   abund <- txi$abundance[, !(colnames(txi$abundance) %in%
     row.names(subset(
       samples,
       condition != condition1 &
-      condition != condition2
+        condition != condition2
     )))]
-  abund <- abund[which(rownames(abund) %in% top_genes), ]
+  abund <- abund[which(rownames(abund) %in% top_genes$gene_id), ]
   rownames(abund) <- tx2gene$gene_symbol[match(
     rownames(abund),
     tx2gene$gene_id
@@ -32,28 +42,27 @@ clusteredHeatmap <- function(condition1, condition2, top_count=50) {
   ))
   anno_col <- samples[which(samples$condition %in% c(condition1, condition2)), ]
 
-  col_names <- list(condition = setNames(
-    viridis(2, begin = 0.2, end = 0.8),
+  col_names <- list(condition = stats::setNames(
+    viridis::viridis(2, begin = 0.2, end = 0.8),
     c(condition1, condition2)
   ))
 
-  ha <- HeatmapAnnotation(
-    group = anno_block(
-      gp = gpar(fill = c(2, "purple")),
+  ha <- ComplexHeatmap::HeatmapAnnotation(
+    group = ComplexHeatmap::anno_block(
+      gp = grid::gpar(fill = c(2, "purple")),
       labels = c(condition2, condition1),
-      labels_gp = gpar(col = "white")
+      labels_gp = grid::gpar(col = "white")
     )
   )
-
-  ra <- rowAnnotation(padj_order = anno_text(
+  ra <- ComplexHeatmap::rowAnnotation(padj_order = ComplexHeatmap::anno_text(
     paste0(
       "(",
-      rank(z[gene_symbol %in% rownames(abund)]$padj,
+      rank(z[z$gene_symbol %in% rownames(abund), ]$padj,
         ties.method = "first"
       ),
       ") "
     ),
-    gp = gpar(
+    gp = grid::gpar(
       fontsize = 6,
       fontface = "bold"
     ),
@@ -62,25 +71,25 @@ clusteredHeatmap <- function(condition1, condition2, top_count=50) {
     show_name = FALSE
   ))
 
-  hm <- Heatmap(abund_scale,
+  hm <- ComplexHeatmap::Heatmap(abund_scale,
     column_title = paste0("Top ", top_count, " DE Genes in ", comparison),
-    column_title_gp = gpar(fontsize = 18),
+    column_title_gp = grid::gpar(fontsize = 18),
     top_annotation = ha,
-    row_names_gp = gpar(fontsize = 6),
+    row_names_gp = grid::gpar(fontsize = 6),
     column_split = 2,
     show_column_names = FALSE,
     show_row_names = TRUE,
     show_parent_dend_line = FALSE,
-    col = plasma(255, direction = -1),
+    col = viridis::plasma(255, direction = -1),
     heatmap_legend_param = list(
       title = "Expression",
       legend_direction = "horizontal",
       title_position = "topcenter",
-      labels_gp = gpar(fontsize = 6)
+      labels_gp = grid::gpar(fontsize = 12)
     )
   )
 
-  return(draw(hm,
+  return(ComplexHeatmap::draw(hm,
     merge_legend = TRUE,
     heatmap_legend_side = "bottom",
     annotation_legend_side = "bottom")

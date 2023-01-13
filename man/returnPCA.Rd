@@ -4,10 +4,10 @@
 \alias{returnPCA}
 \title{Return PCA Data}
 \usage{
-returnPCA(object, intgroup = "condition", ntop = 500)
+returnPCA(object = dds, intgroup = "condition", ntop = 500)
 }
 \arguments{
-\item{object}{a ‘DESeqTransform’ object, with data in ‘assay(x)’, produced for example by either ‘rlog’ or ‘varianceStabilizingTransformation’.}
+\item{object}{a ‘DESeqDataSet’ object with results metadata after running \code{DESeq}.}
 
 \item{intgroup}{interesting groups: a character vector of names in ‘colData(x)’ to use for grouping}
 
@@ -17,5 +17,5 @@ returnPCA(object, intgroup = "condition", ntop = 500)
 A dataframe of the PCA data
 }
 \description{
-This function takes a 'DESeqTransform' object, performs PCA, and returns the PCA data for PC1-4 as a dataframe. This code is modified from the DESeq2 function 'plotPCA'.
+This function takes a ‘DESeqDataSet’ object object, performs a variance stabilizing transform, and returns PCA data for PC1-4 as a dataframe. This code is modified from the DESeq2 function 'plotPCA'.
 }

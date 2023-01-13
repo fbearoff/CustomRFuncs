@@ -10,6 +10,8 @@ clusteredHeatmap(condition1, condition2, top_count = 50)
 \item{condition1}{Reference condition}
 
 \item{condition2}{Experimental condition}
+
+\item{top_count}{How many genes to plot}
 }
 \value{
 A ComplexHeatmap object

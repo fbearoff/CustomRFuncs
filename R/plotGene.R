@@ -10,13 +10,13 @@ plotGene <- function(gene_name) {
     gene = as.character(gene_id),
     returnData = TRUE
   )
-  ggplot(plot_data, aes(
+  ggplot2::ggplot(plot_data, ggplot2::aes(
     x = condition,
     y = count,
     color = condition
   )) +
-    geom_boxplot(show.legend = TRUE) +
-    scale_color_manual(values = plasma(5)) +
-    ggtitle(paste0(gene_name, "\n", gene_id)) +
-    theme(plot.title = element_text(hjust = .5))
+    ggplot2::geom_boxplot(show.legend = TRUE) +
+    ggplot2::scale_color_manual(values = viridis::plasma(5)) +
+    ggplot2::ggtitle(paste0(gene_name, "\n", gene_id)) +
+    ggplot2::theme(plot.title = ggplot2::element_text(hjust = .5))
 }
