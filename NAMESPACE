@@ -2,6 +2,7 @@
 
 export(clusteredHeatmap)
 export(compDESeq2)
+export(getTx2gene)
 export(plot3DPCA)
 export(plotGene)
 export(plotMA)
