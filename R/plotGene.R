@@ -3,6 +3,8 @@
 #' This function returns a data plot of the queried gene.
 #'
 #' @param gene_name the gene to be plotted
+#' @importFrom dplyr "%>%"
+#' @importFrom rlang .data
 #' @export
 plotGene <- function(gene_name) {
   chr <- count <- condition <- gene_symbol <- NULL
@@ -15,10 +17,15 @@ plotGene <- function(gene_name) {
     stop("`dds` variable not defined in global environment")
   }
   dds <- dds
-
-  gene_id <- tx2gene[grep(gene_name, gene_symbol, ignore.case = TRUE) & chr %in% c(1:22, "X", "Y", "MT"), gene_id][1]
+  gene_id <- tx2gene %>%
+    dplyr::filter(.data$chr %in% c(1:22, "X", "Y", "MT")) %>%
+    dplyr::filter(.data$gene_symbol != "") %>%
+    dplyr::filter(grepl("IL1B", .data$gene_symbol, ignore.case = TRUE)) %>%
+    dplyr::select(.data$gene_id) %>%
+    dplyr::slice_head(n = 1) %>%
+    as.character()
   plot_data <- DESeq2::plotCounts(dds,
-    gene = as.character(gene_id),
+    gene = gene_id,
     returnData = TRUE
   )
   ggplot2::ggplot(plot_data, ggplot2::aes(
