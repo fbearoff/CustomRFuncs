@@ -29,7 +29,7 @@ getTx2gene <- function(species) {
     dplyr::rename(
       "tx_id" = "ensembl_transcript_id_version",
       "gene_id" = "ensembl_gene_id_version",
-      "Gene_symbol" = "external_gene_name",
+      "gene_symbol" = "external_gene_name",
       "chr" = "chromosome_name",
       "start" = "start_position",
       "end" = "end_position"
