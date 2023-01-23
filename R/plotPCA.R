@@ -8,25 +8,26 @@
 #' @param x x-axis principal component
 #' @param y y-axis principal component
 #' @return A ggplot object of the PCA data
+#' @importFrom rlang .data
 #' @export
-plotPCA <- function(object = dds, intgroup = "condition", ntop = 500, x = "PC1", y = "PC2") {
+plotPCA <- function(object, intgroup = "condition", ntop = 500, x = "PC1", y = "PC2") {
   pca_data <- CustomRFuncs::returnPCA(object, intgroup, ntop)
 
   percent_var <- round(100 * attr(pca_data, "percentVar"))
   pca <- ggplot2::ggplot(pca_data, ggplot2::aes(!!rlang::sym(x), !!rlang::sym(y),
-    color = condition,
-    fill = condition,
-    label = condition
+    color = .data$condition,
+    fill = .data$condition,
+    label = .data$condition
   )) +
     ggplot2::geom_point() +
-    ggrepel::geom_text_repel(ggplot2::aes(label = name)) +
+    ggrepel::geom_text_repel(ggplot2::aes(label = .data$name)) +
     ggforce::geom_mark_ellipse(
       show.legend = FALSE,
       con.cap = 0,
       expand = grid::unit(1.5, "mm")
     ) +
-  ggplot2::xlab(paste0(x, ": ", percent_var[as.numeric(stringr::str_sub(x, -1))], "% variance")) +
-  ggplot2::ylab(paste0(y, ": ", percent_var[as.numeric(stringr::str_sub(y, -1))], "% variance")) +
+    ggplot2::xlab(paste0(x, ": ", percent_var[as.numeric(stringr::str_sub(x, -1))], "% variance")) +
+    ggplot2::ylab(paste0(y, ": ", percent_var[as.numeric(stringr::str_sub(y, -1))], "% variance")) +
     ggplot2::coord_fixed() +
     ggplot2::theme_classic(base_size = 20) +
     ggplot2::theme(

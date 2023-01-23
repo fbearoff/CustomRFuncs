@@ -4,7 +4,7 @@
 \alias{returnPCA}
 \title{Return PCA Data}
 \usage{
-returnPCA(object = dds, intgroup = "condition", ntop = 500)
+returnPCA(object, intgroup = "condition", ntop = 500)
 }
 \arguments{
 \item{object}{a ‘DESeqDataSet’ object with results metadata after running \code{DESeq}.}

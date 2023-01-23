@@ -4,7 +4,7 @@
 \alias{plotPCA}
 \title{Plot PCA Data}
 \usage{
-plotPCA(object = dds, intgroup = "condition", ntop = 500, x = "PC1", y = "PC2")
+plotPCA(object, intgroup = "condition", ntop = 500, x = "PC1", y = "PC2")
 }
 \arguments{
 \item{object}{a ‘DESeqDataSet’ object with results metadata after running \code{DESeq}.}

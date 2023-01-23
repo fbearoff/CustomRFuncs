@@ -5,6 +5,17 @@
 #' @param gene_name the gene to be plotted
 #' @export
 plotGene <- function(gene_name) {
+  chr <- count <- condition <- gene_symbol <- NULL
+
+  if (!exists("tx2gene")) {
+    stop("`tx2gene` variable not defined in global environment")
+  }
+  tx2gene <- tx2gene
+  if (!exists("dds")) {
+    stop("`dds` variable not defined in global environment")
+  }
+  dds <- dds
+
   gene_id <- tx2gene[grep(gene_name, gene_symbol, ignore.case = TRUE) & chr %in% c(1:22, "X", "Y", "MT"), gene_id][1]
   plot_data <- DESeq2::plotCounts(dds,
     gene = as.character(gene_id),

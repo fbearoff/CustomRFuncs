@@ -7,7 +7,7 @@
 #' @param ntop number of top genes to use for principal components, selected by highest row variance
 #' @return A plotly object of the PCA data
 #' @export
-plot3DPCA <- function(object = dds, intgroup = "condition", ntop = 500) {
+plot3DPCA <- function(object, intgroup = "condition", ntop = 500) {
   pca_data <- CustomRFuncs::returnPCA(object, intgroup, ntop)
   plotly::plot_ly(
     data = pca_data,

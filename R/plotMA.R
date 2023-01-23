@@ -7,40 +7,43 @@
 #' @param top_n_fc Number of DE genes to be highlighted per direction
 #' @returns A ggplot of the MA plot
 #' @importFrom dplyr "%>%"
+#' @importFrom rlang .data
 #' @export
 plotMA <- function(condition1, condition2, top_n_fc = 12) {
+  padj <- baseMean <- log2FoldChange <- NULL
   z <- CustomRFuncs::compDESeq2(condition1, condition2)
   top_fc <- z %>%
-    dplyr::filter(padj <= 0.05, baseMean > 10) %>%
-    dplyr::arrange(dplyr::desc(log2FoldChange)) %>%
+    dplyr::filter(.data$padj <= 0.05, .data$baseMean > 10) %>%
+    dplyr::arrange(dplyr::desc(.data$log2FoldChange)) %>%
     dplyr::slice_head(n = 12)
   bottom_fc <- z %>%
-    dplyr::filter(padj <= 0.05, baseMean > 10) %>%
-    dplyr::arrange(dplyr::desc(log2FoldChange)) %>%
+    dplyr::filter(.data$padj <= 0.05, .data$baseMean > 10) %>%
+    dplyr::arrange(dplyr::desc(.data$log2FoldChange)) %>%
     dplyr::slice_tail(n = 12)
 
   top_fc <- dplyr::bind_rows(top_fc, bottom_fc)
+
   p <- ggplot2::ggplot(
     z,
     ggplot2::aes(
-      x = baseMean + 0.01,
-      y = log2FoldChange,
-      color = ifelse(is.na(padj),
+      x = .data$baseMean + 0.01,
+      y = .data$log2FoldChange,
+      color = ifelse(is.na(.data$padj),
         padj > 0.05,
         padj < 0.05 &
           abs(log2FoldChange) > 1 &
           baseMean > 10
       ),
-      shape = ifelse(is.na(padj),
-        padj > 0.05,
-        padj < 0.05 &
-          abs(log2FoldChange) > 1 &
-          baseMean > 10
+      shape = ifelse(is.na(.data$padj),
+        .data$padj > 0.05,
+        .data$padj < 0.05 &
+          abs(.data$log2FoldChange) > 1 &
+          .data$baseMean > 10
       ),
-      size = ifelse(is.na(padj), .1,
-        ifelse(padj > 0.05 | abs(log2FoldChange) < 1 | baseMean < 10,
+      size = ifelse(is.na(.data$padj), .1,
+        ifelse(.data$padj > 0.05 | abs(.data$log2FoldChange) < 1 | .data$baseMean < 10,
           0.1,
-          log10(padj) * -1
+          log10(.data$padj) * -1
         )
       )
     )
@@ -51,9 +54,9 @@ plotMA <- function(condition1, condition2, top_n_fc = 12) {
       data = top_fc,
       ggplot2::aes(
         label = paste0(
-          gene_symbol,
+          .data$gene_symbol,
           " (",
-          round(log2FoldChange,
+          round(.data$log2FoldChange,
             digits = 1
           ),
           ")"
@@ -94,10 +97,10 @@ plotMA <- function(condition1, condition2, top_n_fc = 12) {
       label = paste0(
         nrow(dplyr::filter(
           z,
-          padj <= 0.05,
-          padj != "NA",
-          log2FoldChange > 1,
-          baseMean > 10
+          .data$padj <= 0.05,
+          .data$padj != "NA",
+          .data$log2FoldChange > 1,
+          .data$baseMean > 10
         )),
         " Genes <i>Upregulated</i> in ", "<b>",
         condition1, "</b>"
@@ -112,10 +115,10 @@ plotMA <- function(condition1, condition2, top_n_fc = 12) {
       label = paste0(
         nrow(dplyr::filter(
           z,
-          padj <= 0.05,
-          padj != "NA",
-          log2FoldChange < -1,
-          baseMean > 10
+          .data$padj <= 0.05,
+          .data$padj != "NA",
+          .data$log2FoldChange < -1,
+          .data$baseMean > 10
         )),
         " Genes <i>Downregulated</i> in <b>",
         condition1, "</b>"

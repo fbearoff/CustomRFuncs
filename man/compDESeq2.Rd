@@ -16,4 +16,5 @@ A data.table object
 }
 \description{
 This function returns a merged data.table object from a DESeq2 results function.
+\code{samples}, \code{txi}, and \code{tx2gene} objects need to be defined in the global environment
 }

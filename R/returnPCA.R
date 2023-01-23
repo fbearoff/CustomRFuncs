@@ -7,7 +7,7 @@
 #' @param ntop number of top genes to use for principal components, selected by highest row variance
 #' @return A dataframe of the PCA data
 #' @export
-returnPCA <- function(object = dds, intgroup = "condition", ntop = 500) {
+returnPCA <- function(object, intgroup = "condition", ntop = 500) {
   object <- DESeq2::vst(object, blind = TRUE)
   rv <- matrixStats::rowVars(SummarizedExperiment::assay(object))
   select <- order(rv, decreasing = TRUE)[seq_len(min(

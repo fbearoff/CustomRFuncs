@@ -4,7 +4,7 @@
 \alias{plot3DPCA}
 \title{Plot PCA Data in 3D}
 \usage{
-plot3DPCA(object = dds, intgroup = "condition", ntop = 500)
+plot3DPCA(object, intgroup = "condition", ntop = 500)
 }
 \arguments{
 \item{object}{a ‘DESeqDataSet’ object with results metadata after running \code{DESeq}.}
