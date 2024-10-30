@@ -72,7 +72,7 @@ plotMA <- function(condition1, condition2, top_n_fc = 12) {
     ggplot2::scale_color_manual(
       labels = c("padj>0.05", "DE Transcripts", "padj=NA"),
       values = viridis::plasma(2, begin = .2, end = .7),
-      ggplot2::guide_legend(title = "")
+      name = NULL
     ) +
     ggplot2::scale_shape_manual(
       guide = "none",

@@ -1,6 +1,6 @@
 Package: CustomRFuncs
 Title: Frank's User Functions
-Version: 1.1
+Version: 1.2
 Authors@R:
     person("Frank", "Bearoff", , "fbearoff@gmail.com", role = c("aut", "cre"),
            comment = c("0000-0002-1344-8168"))
@@ -8,7 +8,7 @@ Description: Frank's user functions for RNAseq and other bioinformatic workflows
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Imports:
     biomaRt,
     ComplexHeatmap,

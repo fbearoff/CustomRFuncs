@@ -7,7 +7,7 @@
 getTx2gene(species)
 }
 \arguments{
-\item{species}{A valid ENSEMBL species abbreviation e.g. \verb{mmusculus, rnorvegicus, hsapiesn}}
+\item{species}{A valid ENSEMBL species abbreviation e.g. \verb{mmusculus, rnorvegicus, hsapiens}}
 }
 \value{
 A dataframe of the tx2gene object

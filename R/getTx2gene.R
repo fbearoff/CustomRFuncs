@@ -2,7 +2,7 @@
 #'
 #' This function returns a tx2gene dataframe object for the queried species
 #'
-#' @param species A valid ENSEMBL species abbreviation e.g. `mmusculus, rnorvegicus, hsapiesn`
+#' @param species A valid ENSEMBL species abbreviation e.g. `mmusculus, rnorvegicus, hsapiens`
 #' @return A dataframe of the tx2gene object
 #' @importFrom dplyr "%>%"
 #' @export
